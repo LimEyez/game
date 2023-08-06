@@ -135,19 +135,22 @@ export default function SubmarineController(props) {
       const playerRotationEuler = new Euler(0, 0, 0).setFromQuaternion(refPlayerPhysicBodyQuaternion.current.clone().normalize())
 
 
-      // console.log(playerRotationEuler.x)
+      // console.log(refPlayerPhysicBodyRotation.current.z)
 
-      if (Math.abs(playerRotationEuler.x) >= playerMaxAngularX) {
 
-        playerAngularSpeedX.current.set(0, 0, 0);
+      // if (Math.abs(playerRotationEuler.x) >= playerMaxAngularX) {
 
-        playerBody.quaternion.set(
-          playerMaxAngularX,                                //    <-------       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          refGroupPlayer.current.quaternion.y,
-          refGroupPlayer.current.quaternion.z
-        )
+        // playerAngularSpeedX.current.set(0, 0, 0);
 
-      }
+        // playerBody.quaternion.set(
+        //   0,
+        //   refPlayerPhysicBodyQuaternion.current.y,
+        //   refPlayerPhysicBodyQuaternion.current.z,
+        //   refPlayerPhysicBodyQuaternion.current.w
+
+        // )
+
+      // }
     }
 
     playerAngularSpeedX.current.multiplyScalar(1 - angularDamping * delta) // Применение сопротивления на вращение X
@@ -156,14 +159,16 @@ export default function SubmarineController(props) {
 
     const playerAngularSpeed = new Vector3(
       playerAngularSpeedX.current.x,
-      playerAngularSpeedY.current.y,
+      0,
       0
     );
 
     if (refPlayerPhysicBodyQuaternion.current) {
       playerAngularSpeed.applyQuaternion(refPlayerPhysicBodyQuaternion.current);
-      // console.log(playerAngularSpeed)
+      playerAngularSpeed.setY(playerAngularSpeedY.current.y)
     }
+
+
 
     playerBody.angularVelocity.copy(playerAngularSpeed) // Присвоение угловой скорости физическому объекту
 
