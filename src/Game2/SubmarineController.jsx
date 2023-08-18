@@ -44,6 +44,8 @@ export default function SubmarineController(props) {
   const acceleration = useRef(4);
   const playerVelocity = useRef(new Vector3());
   const playerVelocityZ = useRef(0);
+  const playerVelocityY = useRef(0);
+  const maxVelocityY = useRef(5);
   const maxVelocityZ = useRef(10);
 
 
@@ -181,14 +183,23 @@ export default function SubmarineController(props) {
 
     const speedController = Number(forward) - Number(backward);   // Проверяет нажатия клавиш для движения (вперед / назад)
 
-    playerVelocityZ.current += speedController * (acceleration.current * delta);
+    const heightController = Number(up) - Number(down); // Проверка нажатия клавиш для подъёма/спуска
 
+    //Измение скорости по оси Z
+    playerVelocityZ.current += speedController * (acceleration.current * delta);
     playerVelocityZ.current *= 1 - linearDamping * delta
 
+    //Изменение высоты объекта по оси Y
+    playerVelocityY.current += heightController * (acceleration.current * delta);
+    playerVelocityY.current *= 1 - linearDamping * delta;
 
+    //Приминение изменения скорости к объекту
     playerVelocity.current.set(
       0,
-      0,
+      Math.min(
+        Math.max(playerVelocityY.current, maxVelocityY.current * -1),
+        maxVelocityY.current
+      ),
       Math.min(
         Math.max(playerVelocityZ.current, maxVelocityZ.current * -1),
         maxVelocityZ.current
@@ -207,8 +218,8 @@ export default function SubmarineController(props) {
 
   });
 
-  useEffect(() => {
-  })
+  /*useEffect(() => {
+  })*/
 
   return (
     <group ref={refGroupPlayer}>
