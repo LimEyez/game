@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useKeyboardSubmarine = () => {
-  const keys = { KeyW: 'forward', KeyS: 'backward', KeyA: 'left', KeyD: 'right', KeyK: 'rotateUp', KeyI: 'rotateDown', ControlLeft: 'up', Space: 'down'};
+  const keys = { KeyW: 'forward', KeyS: 'backward', KeyA: 'left', KeyD: 'right', KeyK: 'rotateUp', KeyI: 'rotateDown', ControlLeft: 'down', Space: 'up'};
   const moveFieldByKey = (key) => keys[key];
 
   const [movement, setMovement] = useState({ forward: false, backward: false, left: false, right: false, up: false, down: false, rotateUp: false, rotateDown: false });
